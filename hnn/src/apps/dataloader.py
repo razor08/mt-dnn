@@ -21,7 +21,7 @@ import threading
 import traceback
 import os
 import time
-from torch._six import string_classes, int_classes, FileNotFoundError
+# from torch._six import string_classes, int_classes, FileNotFoundError
 
 IS_WINDOWS = sys.platform == "win32"
 if IS_WINDOWS:
@@ -180,11 +180,11 @@ def default_collate(batch):
         if elem.shape == ():  # scalars
             py_type = float if elem.dtype.name.startswith('float') else int
             return numpy_type_map[elem.dtype.name](list(map(py_type, batch)))
-    elif isinstance(batch[0], int_classes):
+    elif isinstance(batch[0], int):
         return torch.LongTensor(batch)
     elif isinstance(batch[0], float):
         return torch.DoubleTensor(batch)
-    elif isinstance(batch[0], string_classes):
+    elif isinstance(batch[0], str):
         return batch
     elif isinstance(batch[0], collections.Mapping):
         return {key: default_collate([d[key] for d in batch]) for key in batch[0]}
@@ -198,7 +198,7 @@ def default_collate(batch):
 def pin_memory_batch(batch):
     if isinstance(batch, torch.Tensor):
         return batch.pin_memory()
-    elif isinstance(batch, string_classes):
+    elif isinstance(batch, str):
         return batch
     elif isinstance(batch, collections.Mapping):
         return {k: pin_memory_batch(sample) for k, sample in batch.items()}
@@ -379,7 +379,8 @@ class _SequentialDataLoaderIter(object):
                 try:
                     while not self.worker_result_queue.empty():
                         self.worker_result_queue.get()
-                except (FileNotFoundError, ImportError):
+                # except (FileNotFoundError, ImportError):
+                except:
                     # Many weird errors can happen here due to Python
                     # shutting down. These are more like obscure Python bugs.
                     # FileNotFoundError can happen when we rebuild the fd

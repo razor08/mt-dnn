@@ -50,7 +50,7 @@ POOL=cap #mean, ftp
 SWA=0.95
 SWA_START=2
 TAG=wscr_SWA_${SWA_START}_${POOL}_gt_${GROUP_TASKS}_${TASKS}_${SIM}_${LOSS}_w${WRP}_${LR_SCH}_t${GAMA}_dprd_${ALPHA}_${BETA}_${GAMA}
-OUTPUT=../data/experiments/$(hostname)/$Task/L/${Epoch}_${BS}_${LR}_${Adam_Beta1}_${QHAdam_V1}_${TAG}
+OUTPUT=data/experiments/$(hostname)/$Task/L/${Epoch}_${BS}_${LR}_${Adam_Beta1}_${QHAdam_V1}_${TAG}
 
 [ -e $OUTPUT/script ] || mkdir -p $OUTPUT/script
 cp -f $SCRIPT $OUTPUT/script
@@ -60,14 +60,7 @@ cp -f $INIT_SPEC $OUTPUT/model_init.spec
 cp -f $CONFIG $OUTPUT/bert_config.json
 cp -f $VOCAB $OUTPUT/vocab.txt
 rsync -ruzC --exclude-from=$SOURCE/.gitignore $SOURCE/ $OUTPUT/src
-echo $SOURCE
-echo $data_root
-echo $WSCData
-echo $Task
-echo $MODEL
-echo $SEQ
-echo $BS
-echo $SOURCE/apps/run_hnn.py
+
 python $SOURCE/apps/run_hnn.py \
   --task_name $Task \
 	--do_train \

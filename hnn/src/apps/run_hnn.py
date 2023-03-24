@@ -37,6 +37,7 @@ from hnn_dataset import *
 from hnn_model import *
 import pdb
 
+os.environ['KMP_DUPLICATE_LIB_OK']='TRUE'
 class SWA:
   def __init__(self, model, mu, start = 0):
     self.shadow_={}
